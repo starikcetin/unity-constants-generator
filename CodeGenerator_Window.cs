@@ -1,4 +1,3 @@
-#if UNITY_EDITOR
 using Microsoft.CSharp;
 using System.CodeDom;
 using System.CodeDom.Compiler;
@@ -228,4 +227,3 @@ public class CodeGenerator_Window : EditorWindow
     }
     #endregion
 }
-#endif
