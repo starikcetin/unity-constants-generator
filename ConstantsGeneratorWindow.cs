@@ -12,13 +12,13 @@ using Microsoft.CSharp;
 using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
-using UnityEngine.Experimental.UIElements.StyleEnums;
 
 namespace UnityConstantsGenerator
 {
     public class UnityConstantsGenerator : EditorWindow
     {
-        private string _folderPath = @"Generated Unity Constants";
+        private string _namespaceName = @"UnityConstants";
+        private string _folderPath = @"Unity Constants";
         private string _axesFileName = @"Axes.cs";
         private string _tagsFileName = @"Tags.cs";
         private string _sortingLayersFileName = @"SortingLayers.cs";
@@ -43,6 +43,10 @@ namespace UnityConstantsGenerator
 
             EditorGUILayout.Separator();
 
+            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.PrefixLabel(@"Namespace");
+            _namespaceName = EditorGUILayout.TextField(_namespaceName, EditorStyles.textField);
+            EditorGUILayout.EndHorizontal();
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.PrefixLabel(@"Folder Path");
             _folderPath = EditorGUILayout.TextField(_folderPath, EditorStyles.textField);
@@ -79,10 +83,10 @@ namespace UnityConstantsGenerator
             {
                 try
                 {
-                    GenerateAndForceImport(Path.Combine("Assets", _folderPath, _axesFileName), GetAllAxisNames);
-                    GenerateAndForceImport(Path.Combine("Assets", _folderPath, _tagsFileName), GetAllTags);
-                    GenerateAndForceImport(Path.Combine("Assets", _folderPath, _sortingLayersFileName), GetAllSortingLayers);
-                    GenerateAndForceImport(Path.Combine("Assets", _folderPath, _layersFileName), GetAllLayers);
+                    GenerateAndForceImport(_namespaceName, Path.Combine("Assets", _folderPath, _axesFileName), GetAllAxisNames);
+                    GenerateAndForceImport(_namespaceName, Path.Combine("Assets", _folderPath, _tagsFileName), GetAllTags);
+                    GenerateAndForceImport(_namespaceName, Path.Combine("Assets", _folderPath, _sortingLayersFileName), GetAllSortingLayers);
+                    GenerateAndForceImport(_namespaceName, Path.Combine("Assets", _folderPath, _layersFileName), GetAllLayers);
                     GC.Collect();
                 }
                 catch (Exception ex)
@@ -98,12 +102,12 @@ namespace UnityConstantsGenerator
 
         #region code generation
 
-        private static void GenerateAndForceImport(string fullPath, Func<IEnumerable<string>> namesProvider)
+        private static void GenerateAndForceImport(string namespaceName, string fullPath, Func<IEnumerable<string>> namesProvider)
         {
             var names = namesProvider();
             if (names.Any())
             {
-                GenerateNamesCodeFile(fullPath, names);
+                GenerateNamesCodeFile(namespaceName, fullPath, names);
 
                 AssetDatabase.ImportAsset(fullPath, ImportAssetOptions.Default);
                 AssetDatabase.Refresh();
@@ -112,12 +116,12 @@ namespace UnityConstantsGenerator
                 Debug.Log($"No names found, skipping generation of {fullPath}");
         }
 
-        private static void GenerateNamesCodeFile(string fullPath, IEnumerable<string> names)
+        private static void GenerateNamesCodeFile(string namespaceName, string fullPath, IEnumerable<string> names)
         {
             var name = Path.GetFileNameWithoutExtension(fullPath);
             var constants = names.ToDictionary(ConvertToValidIdentifier, s => s);
 
-            var code = CreateStringConstantsClass(name, constants);
+            var code = CreateStringConstantsClass(namespaceName, name, constants);
 
             Directory.CreateDirectory(Path.GetDirectoryName(fullPath));
             using (var stream = new StreamWriter(fullPath, append: false))
@@ -129,11 +133,12 @@ namespace UnityConstantsGenerator
         }
 
         private static CodeCompileUnit CreateStringConstantsClass(
+            string namespaceName,
             string name,
             IDictionary<string, string> constants)
         {
             var compileUnit = new CodeCompileUnit();
-            var @namespace = new CodeNamespace();
+            var @namespace = new CodeNamespace(namespaceName);
 
             var @class = new CodeTypeDeclaration(name);
 
