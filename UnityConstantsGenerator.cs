@@ -83,10 +83,10 @@ namespace UnityConstantsGenerator
             {
                 try
                 {
-                    GenerateAndForceImport(_namespaceName, Path.Combine("Assets", _folderPath, _axesFileName), GetAllAxisNames);
-                    GenerateAndForceImport(_namespaceName, Path.Combine("Assets", _folderPath, _tagsFileName), GetAllTags);
-                    GenerateAndForceImport(_namespaceName, Path.Combine("Assets", _folderPath, _sortingLayersFileName), GetAllSortingLayers);
-                    GenerateAndForceImport(_namespaceName, Path.Combine("Assets", _folderPath, _layersFileName), GetAllLayers);
+                    GenerateAndImport(_namespaceName, Path.Combine("Assets", _folderPath, _axesFileName), GetAllAxisNames);
+                    GenerateAndImport(_namespaceName, Path.Combine("Assets", _folderPath, _tagsFileName), GetAllTags);
+                    GenerateAndImport(_namespaceName, Path.Combine("Assets", _folderPath, _sortingLayersFileName), GetAllSortingLayers);
+                    GenerateAndImport(_namespaceName, Path.Combine("Assets", _folderPath, _layersFileName), GetAllLayers);
                     GC.Collect();
                 }
                 catch (Exception ex)
@@ -102,15 +102,13 @@ namespace UnityConstantsGenerator
 
         #region code generation
 
-        private static void GenerateAndForceImport(string namespaceName, string fullPath, Func<IEnumerable<string>> namesProvider)
+        private static void GenerateAndImport(string namespaceName, string fullPath, Func<IEnumerable<string>> namesProvider)
         {
             var names = namesProvider();
             if (names.Any())
             {
                 GenerateNamesCodeFile(namespaceName, fullPath, names);
-
-                AssetDatabase.ImportAsset(fullPath, ImportAssetOptions.Default);
-                AssetDatabase.Refresh();
+                AssetDatabase.ImportAsset(fullPath, ImportAssetOptions.ForceUpdate);
             }
             else
                 Debug.Log($"No names found, skipping generation of {fullPath}");
