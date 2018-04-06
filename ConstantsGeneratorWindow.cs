@@ -12,14 +12,14 @@ using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
 
-public class CodeGenerator_Window : EditorWindow
+public class CodeGeneratorWindow : EditorWindow
 {
     private string axesPath = @"CodeGenerator/Axes.cs";
     private string tagsPath = @"CodeGenerator/Tags.cs";
     private string sortingLayersPath = @"CodeGenerator/SortingLayers.cs";
     private string layersPath = @"CodeGenerator/Layers.cs";
 
-    [MenuItem("Window/Code Generator")]
+    [MenuItem("Window/Constants Generator")]
     private static void CallCreateWindow()
     {
         // Get existing open window or if none, make a new one:
