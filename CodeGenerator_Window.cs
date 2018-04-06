@@ -14,10 +14,10 @@ using UnityEngine;
 
 public class CodeGenerator_Window : EditorWindow
 {
-    private string axesPath = @"Scripts/Auto/Axes.cs";
-    private string tagsPath = @"Scripts/Auto/Tags.cs";
-    private string sortingLayersPath = @"Scripts/Auto/SortingLayers.cs";
-    private string layersPath = @"Scripts/Auto/Layers.cs";
+    private string axesPath = @"CodeGenerator/Axes.cs";
+    private string tagsPath = @"CodeGenerator/Tags.cs";
+    private string sortingLayersPath = @"CodeGenerator/SortingLayers.cs";
+    private string layersPath = @"CodeGenerator/Layers.cs";
 
     [MenuItem("Window/Code Generator")]
     private static void CallCreateWindow()
@@ -76,7 +76,7 @@ public class CodeGenerator_Window : EditorWindow
     #region code generation
     private static void GenerateAndForceImport(string path, System.Func<IEnumerable<string>> namesProvider)
     {
-        var fullPath = Path.Combine(Application.dataPath, path);
+        var fullPath = Path.Combine("Assets", path);
 
         var names = namesProvider();
         if (names.Any())
