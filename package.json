@@ -1,0 +1,7 @@
+{
+    "dependencies": {},
+    "description": "[Unity CodeDom] Editor-time code generator. Generates constant-declaration-only classes for Tags, Layers, Sorting layers and Input axes. Good for type-safety.",
+    "displayName": "Unity Constants Generator",
+    "name": "com.dogfuntom.unityconstantsgenerator",
+    "version": "1.1.0"
+}
