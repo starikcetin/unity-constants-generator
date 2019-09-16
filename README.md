@@ -1,5 +1,5 @@
 # unity-constants-generator
 
-Auto-generates const fields for layers, tags, and input axes.
+[Unity CodeDom] Editor-time code generator. Generates constant-declaration-only classes for Tags, Layers, Sorting layers and Input axes. Good for type-safety.
 
 Original author is [dogfuntom](https://gist.github.com/dogfuntom/00faf9f3598d845b1a5c)
