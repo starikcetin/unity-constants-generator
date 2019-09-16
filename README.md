@@ -1,3 +1,7 @@
+This repository has UPM support. Use https://github.com/mob-sakai/UpmGitExtension for installing it directly in Unity.
+
+----
+
 # unity-constants-generator
 
 [Unity CodeDom] Editor-time code generator. Generates constant-declaration-only classes for Tags, Layers, Sorting layers and Input axes. Good for type-safety.
